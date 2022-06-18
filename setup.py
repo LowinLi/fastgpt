@@ -8,7 +8,7 @@ with open(path.join(here, "README.md"), encoding="utf-8") as f:
 
 setuptools.setup(
     name="fastgpt",
-    version="0.0.1",
+    version="0.0.2",
     license="MIT License",
     author="LowinLi",
     author_email="lowinli@outlook.com",
