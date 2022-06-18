@@ -1,0 +1,12 @@
+__pycache__
+distilgpt2
+hist
+microsoft
+shibing624
+*.pyc
+checkpoints
+.vscode
+build
+dist
+fastgpt.egg-info
+.coverage
