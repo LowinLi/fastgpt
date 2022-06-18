@@ -44,6 +44,7 @@ setuptools.setup(
         "onnxruntime==1.10.0",
         "numpy>=1.22.2",
         "transformers>4.6.1",
+        "six==1.16.0"
     ],
     classifiers=[
         "Intended Audience :: Developers",
