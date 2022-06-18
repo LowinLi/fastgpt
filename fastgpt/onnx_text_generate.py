@@ -25,7 +25,7 @@ class CausalLMModelForOnnxGeneration(PreTrainedModel):
     def from_pretrained(cls, model_name_path: str):
         transformers_onnx_pipeline(model_name_path)
         onnx_path = os.path.join(model_name_path, "onnx/model-quantized.onnx")
-        cls(onnx_path, model_path=model_name_path)
+        return cls(onnx_path, model_path=model_name_path)
 
     def forward(
         self,
