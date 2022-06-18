@@ -23,8 +23,8 @@ jobs:
         flake8 fastgpt --max-line-length=127
     
     - name: Test with unittest
-    run: |
-      coverage run --source fastgpt -m unittest test/model_test.py
-      codecov
-      total=`coverage report|grep TOTAL|awk {'print $ 4'}`
-      curl "https://img.shields.io/badge/coverage-$total-green" > coverage.svg
+      run: |
+        coverage run --source fastgpt -m unittest test/model_test.py
+        codecov
+        total=`coverage report|grep TOTAL|awk {'print $ 4'}`
+        curl "https://img.shields.io/badge/coverage-$total-green" > coverage.svg
