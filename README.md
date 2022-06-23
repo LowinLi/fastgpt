@@ -92,6 +92,6 @@ print("=" * 20)
 
 ## 感谢
 
-[transformers](https://github.com/huggingface/transformers)
-[fastT5](https://github.com/Ki6an/fastT5)
-[onnxruntime](https://github.com/microsoft/onnxruntime)
++ [transformers](https://github.com/huggingface/transformers)
++ [fastT5](https://github.com/Ki6an/fastT5)
++ [onnxruntime](https://github.com/microsoft/onnxruntime)
