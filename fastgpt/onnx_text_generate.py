@@ -23,8 +23,9 @@ class CausalLMModelForOnnxGeneration(PreTrainedModel):
 
     @classmethod
     def from_pretrained(cls, model_name_path: str):
-        transformers_onnx_pipeline(model_name_path)
         onnx_path = os.path.join(model_name_path, "onnx/model-quantized.onnx")
+        if not os.path.exists(onnx_path):
+            transformers_onnx_pipeline(model_name_path)
         return cls(onnx_path, model_path=model_name_path)
 
     def forward(
@@ -50,7 +51,7 @@ class CausalLMModelForOnnxGeneration(PreTrainedModel):
                 [
                     self.config.n_layer,
                     2,
-                    1,
+                    input_ids.shape[0],
                     self.config.n_head,
                     0,
                     int(self.config.n_embd / self.config.n_head),
@@ -62,7 +63,7 @@ class CausalLMModelForOnnxGeneration(PreTrainedModel):
             )
         if attention_mask is None:
             attention_mask = np.array(
-                [[1] * int(past_key_values_array.shape[-2] + input_ids.shape[1])]
+                [[1] * int(past_key_values_array.shape[-2] + input_ids.shape[1])]*input_ids.shape[0]
             )
         else:
             attention_mask = attention_mask.cpu().numpy()
@@ -83,4 +84,16 @@ class CausalLMModelForOnnxGeneration(PreTrainedModel):
             hidden_states=None,
             attentions=None,
             cross_attentions=None,
+        )
+
+    @staticmethod
+    def _reorder_cache(past: Tuple[Tuple[torch.Tensor]], beam_idx: torch.Tensor) -> Tuple[Tuple[torch.Tensor]]:
+        """
+        This function is used to re-order the `past_key_values` cache if [`~PreTrainedModel.beam_search`] or
+        [`~PreTrainedModel.beam_sample`] is called. This is required to match `past_key_values` with the correct
+        beam_idx at every generation step.
+        """
+        return tuple(
+            tuple(past_state.index_select(0, beam_idx.to(past_state.device)) for past_state in layer_past)
+            for layer_past in past
         )
