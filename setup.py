@@ -8,7 +8,7 @@ with open(path.join(here, "README.md"), encoding="utf-8") as f:
 
 setuptools.setup(
     name="fastgpt",
-    version="0.0.2",
+    version="0.0.3",
     license="MIT License",
     author="LowinLi",
     author_email="lowinli@outlook.com",
@@ -43,7 +43,7 @@ setuptools.setup(
         "onnx",
         "onnxruntime==1.10.0",
         "numpy>=1.22.2",
-        "transformers>4.6.1",
+        "transformers>=4.19",
         "six==1.16.0"
     ],
     classifiers=[
