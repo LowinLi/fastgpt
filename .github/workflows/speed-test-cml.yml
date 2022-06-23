@@ -1,0 +1,24 @@
+name: speed-test-in-action
+on: [push]
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: iterative/setup-cml@v1
+      - name: Train model
+        run: |
+          # Your ML workflow goes here
+          python -m pip install --upgrade pip
+          pip install torch>=1.7.0 onnx onnxruntime==1.10.0 numpy>=1.22.2 transformers>4.6.1 coverage flake8 six==1.16.0 codecov
+          cd test && python speed_test.py
+      - name: Write CML report
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Post reports as comments in GitHub PRs
+          cat /proc/cpuinfo | grep 'model name' |uniq > cpu.md
+          cat /proc/cpuinfo | grep "cpu cores" | uniq > cpu_core.md
+          cat metric.md evaluate.md cpu.md cpu_core.md > report.md
+          cml-send-comment report.md
+          echo "finish"
