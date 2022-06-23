@@ -26,7 +26,7 @@ def evaluate_torch(max_length, num_beams):
     for i in range(10):
         generated_ids = model.generate(
             input_ids,
-            max_length=max_length,
+            max_length=max_length + len(prompt_text),
             decoder_start_token_id=tokenizer.cls_token_id,
             eos_token_id=tokenizer.sep_token_id,
             output_scores=True,
@@ -41,7 +41,9 @@ def evaluate_torch(max_length, num_beams):
             num_beams=num_beams
         )
     waste_time = time.time() - start
-    latency = round(waste_time / 100 * 1000, 3)
+    latency = round(waste_time / 10 * 1000, 3)
+    print(tokenizer.decode(generated_ids[0], skip_special_tokens=True))
+    print("=" * 20)
     return latency
     
 
@@ -73,7 +75,9 @@ def evaluate_fastgpt(max_length, num_beams):
             num_beams=num_beams
         )
     waste_time = time.time() - start
-    latency = round(waste_time / 100 * 1000, 3)
+    latency = round(waste_time / 10 * 1000, 3)
+    print(tokenizer.decode(generated_ids[0], skip_special_tokens=True))
+    print("=" * 20)
     return latency
 
 
@@ -81,14 +85,15 @@ def evaluate_fastgpt(max_length, num_beams):
 if __name__ == "__main__":
     with open("speed.md", "w") as f:
         f.write("## 生成速度评测(ms)")
-        for max_length in [32, 64, 128]:
+        for max_length in [16, 32, 64]:
             f.write(f"+ 生成长度{max_length}评测\n---\n")
             f.write("|模型框架|beam:2|beam:3|beam:4|\n|-|-|-|-|\n|torch|")
-            for num_beams in [2, 3, 4]:
-                micro_second = evaluate_torch(max_length, num_beams)
-                f.write(f"{micro_second}|")
+            for num_beams in [1, 2, 3]:
+                latency = evaluate_torch(max_length, num_beams)
+                print(f"torch: max_length{max_length}, num_beam{num_beams}, latency{latency}")
+                f.write(f"{latency}|")
             f.write("\n|fastgpt|")
-            for num_beams in [2, 3, 4]:
+            for num_beams in [1, 2, 3]:
                 latency = evaluate_fastgpt(max_length, num_beams)
                 print(f"fastgpt: max_length{max_length}, num_beam{num_beams}, latency{latency}")
                 f.write(f"{latency}|")
