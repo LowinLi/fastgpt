@@ -19,6 +19,6 @@ jobs:
           # Post reports as comments in GitHub PRs
           cat /proc/cpuinfo | grep 'model name' |uniq > cpu.md
           cat /proc/cpuinfo | grep "cpu cores" | uniq > cpu_core.md
-          cat speed.md cpu.md cpu_core.md > report.md
+          cat test/speed.md cpu.md cpu_core.md > report.md
           cml-send-comment report.md
           echo "finish"
