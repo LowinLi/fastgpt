@@ -8,7 +8,8 @@ import os
 import sys
 import time
 from transformers import AutoTokenizer, AutoModelForCausalLM
-
+import torch
+torch.set_num_threads(1)
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from fastgpt import (
     CausalLMModelForOnnxGeneration,
@@ -49,7 +50,7 @@ def evaluate_torch(max_length, num_beams):
 
 
 def evaluate_fastgpt(max_length, num_beams):
-    model = CausalLMModelForOnnxGeneration.from_pretrained("distilgpt2")
+    model = CausalLMModelForOnnxGeneration.from_pretrained("distilgpt2", threads=1)
     tokenizer = AutoTokenizer.from_pretrained("distilgpt2")
 
     prompt_text = "Natural language processing (NLP) is the ability of a computer program to understand human language as it is spoken and written"
@@ -98,5 +99,5 @@ if __name__ == "__main__":
                 latency = evaluate_fastgpt(max_length, num_beams)
                 print(f"fastgpt: max_length{max_length}, num_beam{num_beams}, latency{latency}")
                 f.write(f"{latency}|")
-            f.write("\n")
+            f.write("\n---\n")
             

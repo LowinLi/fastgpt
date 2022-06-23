@@ -84,7 +84,8 @@ print("=" * 20)
 1. **兼容 transformers**: 基于 transformers 库的[文本生成函数](https://github.com/huggingface/transformers/blob/v4.20.1/src/transformers/generation_utils.py#L845)，功能非常丰富。fastgpt 在 onnx 格式模型上，兼容该函数。
 2. **兼容 cache**: 在文本生成的一个个 token 生成过程中的`past_key_value`需要在 GPT 模型上持续迭代输入，fastgpt 已经通过 onnx 格式做好衔接。
 3. **代码修改低成本**：代码替换原版 transformers 仅需修改两行代码。
-4. **cpu 上高效推理**:
+4. **onnx 格式占内存小**：对于 distilgpt2 模型，torch 版`318MB`, onnx 量化版`243MB`
+5. **cpu 上高速推理**:
 
 ## 速度对比
 
@@ -92,6 +93,6 @@ print("=" * 20)
 
 ## 感谢
 
-+ [transformers](https://github.com/huggingface/transformers)
-+ [fastT5](https://github.com/Ki6an/fastT5)
-+ [onnxruntime](https://github.com/microsoft/onnxruntime)
+- [transformers](https://github.com/huggingface/transformers)
+- [fastT5](https://github.com/Ki6an/fastT5)
+- [onnxruntime](https://github.com/microsoft/onnxruntime)
