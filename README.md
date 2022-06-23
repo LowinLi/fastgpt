@@ -137,7 +137,7 @@ print("=" * 20)
 model name : Intel(R) Xeon(R) Platinum 8272CL CPU @ 2.60GHz
 cpu cores : 2
 
-- 详见 actions 的 [cml 报告](https://github.com/LowinLi/fastgpt/commit/bf087da3470d302be9cf3f56d3aeb4548f1f104a#commitcomment-76779495)
+- 详见 actions 的 [cml 报告](https://github.com/LowinLi/fastgpt/commit/2781cc79c53b3d95807991d3f2dc0fab3d4e379a)
 
 ## 感谢
 
