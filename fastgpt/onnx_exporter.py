@@ -84,7 +84,6 @@ def test_torch_inference(model):
     print("torch加载测试...")
     n_layer = model.config.n_layer
     n_head = model.config.n_head
-    
     embed_size_per_head = int(model.config.n_embd / model.config.n_head)
     model_wrapper = ModelWrapper(model)
     model_wrapper.eval()
