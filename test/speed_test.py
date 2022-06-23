@@ -7,7 +7,7 @@
 import os
 import sys
 import time
-from transformers import AutoTokenizer, AutoCausalLMModel
+from transformers import AutoTokenizer, AutoModelForCausalLM
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from fastgpt import (
@@ -15,7 +15,7 @@ from fastgpt import (
 )
 
 def evaluate_torch(max_length, num_beams):
-    model = AutoCausalLMModel.from_pretrained("distilgpt2")
+    model = AutoModelForCausalLM.from_pretrained("distilgpt2")
     tokenizer = AutoTokenizer.from_pretrained("distilgpt2")
     
     prompt_text = "Natural language processing (NLP) is the ability of a computer program to understand human language as it is spoken and written"

@@ -22,8 +22,8 @@
 * 原 transformers 代码：
 
 ```python
-from transformers import AutoCausalLMModel
-model = AutoCausalLMModel.from_pretrained("distilgpt2")
+from transformers import AutoModelForCausalLM
+model = AutoModelForCausalLM.from_pretrained("distilgpt2")
 ```
 
 - fastgpt 代码：
