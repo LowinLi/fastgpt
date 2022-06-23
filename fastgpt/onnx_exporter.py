@@ -9,6 +9,7 @@ from onnxruntime.quantization import quantize_dynamic, QuantType
 import onnxruntime
 import torch
 import os
+import time
 import numpy as np
 from torch import tensor
 from .model_wrapper import ModelWrapper
@@ -94,10 +95,14 @@ def test_torch_inference(model):
         "attention_mask": tensor([[1, 1, 1, 1, 1]]),
         "past_key_values": past_key_values,
     }
+    start = time.time()
     with torch.no_grad():
         output = model_wrapper(**test_inputs)
     print("#" * 10 + "\ntorch格式输出：\n")
     print(output[0])
+    waste_time = time.time() - start
+    latency = round(waste_time * 1000, 3)
+    print(f"torch推断用时{latency}ms")
     return output[0]
 
 
@@ -114,9 +119,13 @@ def test_onnx_inference(onnx_name_path, config):
             size=(n_layer, 2, 1, n_head, 0, embed_size_per_head)
         ).astype(np.float32),
     }
+    start = time.time()
     output = session.run(None, ort_inputs)
     print("#" * 10 + "\nonnx格式输出：\n")
     print(output[0])
+    waste_time = time.time() - start
+    latency = round(waste_time * 1000, 3)
+    print(f"onnx推断用时{latency}ms")
     return output[0]
 
 
