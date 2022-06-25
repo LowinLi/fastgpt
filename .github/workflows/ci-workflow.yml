@@ -26,5 +26,5 @@ jobs:
       run: |
         coverage run --source fastgpt -m unittest test/model_test.py
         codecov
-        total=`coverage report|grep TOTAL|awk {'print $ 4'}`
-        curl "https://img.shields.io/badge/coverage-$total-green" > coverage.svg
+    - name: Upload coverage reports to Codecov with GitHub Action
+      uses: codecov/codecov-action@v3
