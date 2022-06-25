@@ -26,7 +26,7 @@ class Tests(unittest.TestCase):
         ).input_ids
         generated_ids = model.generate(
             input_ids,
-            max_length=64 + len(prompt_text),
+            max_length=64 + input_ids.shape[1],
             decoder_start_token_id=tokenizer.cls_token_id,
             eos_token_id=tokenizer.sep_token_id,
             output_scores=True,
