@@ -6,14 +6,10 @@ https://github.com/salesforce/CodeGen#demo
 
 import sys
 import os
+from tqdm import tqdm
+from fastgpt import CausalLMModelForOnnxGeneration
 
 file_dir = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.join(os.path.dirname(os.path.dirname(file_dir)), "fastgpt"))
-
-import os
-from tqdm import tqdm
-from model_wrapper import CausalLMModelForOnnxGeneration
-
 codegen_dir = os.path.join(file_dir, "CodeGen")
 sys.path.append(codegen_dir)
 from CodeGen.jaxformer.hf.sample import create_custom_gpt2_tokenizer
@@ -24,7 +20,7 @@ tokenizer.padding_side = "left"
 pad = 50256
 tokenizer.pad_token = pad
 
-model_path = "checkpoints/codegen-350M-multi"
+model_path = "checkpoints/codegen-350M-mono"
 onnx_model_path = os.path.join(model_path, "onnx/model-quantized.onnx")
 config = CodeGenConfig.from_pretrained(model_path)
 

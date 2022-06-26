@@ -142,6 +142,8 @@ cpu cores : 2
 
 详见 GITHUB ACTIONS 的[cml 报告](https://github.com/LowinLi/fastgpt/commit/044567f960dd05fb0ef06870cf12002718ed5861#commitcomment-76805953)
 
+## 补充
+1. 对于[CodeGen](https://github.com/salesforce/CodeGen)系列代码生成模型，官方是不支持`transformers`库的，因此不能直接用`fastgpt`加载，请转至[example/codegen](https://github.com/LowinLi/fastgpt/tree/main/example/codegen)进行onnx量化和文本生成
 ## 感谢
 
 - [transformers](https://github.com/huggingface/transformers)
