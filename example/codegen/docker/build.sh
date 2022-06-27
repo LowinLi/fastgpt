@@ -7,7 +7,7 @@ cd $BUILDROOT
 CONTAINER="lowinli98/fastgpt-codegen"   #替换成你的容器名称
 VERSION=`git describe --abbrev=0 --tags`
  
-IMAGE_NAME="${CONTAINER}:${TAG}"
+IMAGE_NAME="${CONTAINER}:${VERSION}"
  
 cmd="docker build -t $IMAGE_NAME -f $DIR/dockerfile $BUILDROOT"
 echo $cmd
