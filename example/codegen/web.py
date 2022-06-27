@@ -41,7 +41,7 @@ def generate_mono():
         top_p=parameters["top_p"],
         use_cache=True,
     )
-    gen_text = tokenizer.decode(tokens[0], skip_special_tokens=True)
+    gen_text = tokenizer.decode(tokens[0][input_ids.shape[1]:], skip_special_tokens=True) # 只要新生成的
     logger.info(f"###\ninput:{inputs}\noutput:{gen_text}")
     data = simplejson.dumps(
         [{"generated_text": gen_text}], indent=4, ensure_ascii=False, ignore_nan=True
