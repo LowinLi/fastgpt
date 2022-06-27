@@ -1,14 +1,19 @@
 import setuptools
 from os import path
+import subprocess
 
 here = path.abspath(path.dirname(__file__))
-
+version = (
+    subprocess.check_output(["git", "describe", "--abbrev=0", "--tags"])
+    .decode("utf-8")
+    .strip()
+)
 with open(path.join(here, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 
 setuptools.setup(
     name="fastgpt",
-    version="0.0.3",
+    version=version,
     license="MIT License",
     author="LowinLi",
     author_email="lowinli@outlook.com",
@@ -44,7 +49,7 @@ setuptools.setup(
         "onnxruntime==1.10.0",
         "numpy>=1.22.2",
         "transformers>=4.19",
-        "six==1.16.0"
+        "six==1.16.0",
     ],
     classifiers=[
         "Intended Audience :: Developers",

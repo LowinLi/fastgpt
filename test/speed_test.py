@@ -9,16 +9,18 @@ import sys
 import time
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
+
 torch.set_num_threads(1)
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from fastgpt import (
     CausalLMModelForOnnxGeneration,
 )
 
+
 def evaluate_torch(max_length, num_beams):
     model = AutoModelForCausalLM.from_pretrained("distilgpt2")
     tokenizer = AutoTokenizer.from_pretrained("distilgpt2")
-    
+
     prompt_text = "Natural language processing (NLP) is the ability of a computer program to understand human language as it is spoken and written"
     input_ids = tokenizer(
         prompt_text, return_tensors="pt", add_special_tokens=False
@@ -39,14 +41,13 @@ def evaluate_torch(max_length, num_beams):
             num_return_sequences=1,
             length_penalty=2.0,
             early_stopping=True,
-            num_beams=num_beams
+            num_beams=num_beams,
         )
     waste_time = time.time() - start
     latency = round(waste_time / 5 * 1000, 3)
     print(tokenizer.decode(generated_ids[0], skip_special_tokens=True))
     print("=" * 20)
     return latency
-    
 
 
 def evaluate_fastgpt(max_length, num_beams):
@@ -74,7 +75,7 @@ def evaluate_fastgpt(max_length, num_beams):
             length_penalty=2.0,
             early_stopping=True,
             num_beams=num_beams,
-            use_cache=True
+            use_cache=True,
         )
     waste_time = time.time() - start
     latency = round(waste_time / 5 * 1000, 3)
@@ -83,7 +84,6 @@ def evaluate_fastgpt(max_length, num_beams):
     return latency
 
 
-    
 if __name__ == "__main__":
     with open("speed.md", "w") as f:
         f.write("## 生成速度评测(ms)\n\n")
@@ -92,12 +92,15 @@ if __name__ == "__main__":
             f.write("|模型框架|beam:1|beam:2|beam:3|beam:4|\n|-|-|-|-|-|\n|torch|")
             for num_beams in [1, 2, 3, 4]:
                 latency = evaluate_torch(max_length, num_beams)
-                print(f"torch: max_length{max_length}, num_beam{num_beams}, latency{latency}")
+                print(
+                    f"torch: max_length{max_length}, num_beam{num_beams}, latency{latency}"
+                )
                 f.write(f"{latency}|")
             f.write("\n|fastgpt|")
             for num_beams in [1, 2, 3, 4]:
                 latency = evaluate_fastgpt(max_length, num_beams)
-                print(f"fastgpt: max_length{max_length}, num_beam{num_beams}, latency{latency}")
+                print(
+                    f"fastgpt: max_length{max_length}, num_beam{num_beams}, latency{latency}"
+                )
                 f.write(f"{latency}|")
             f.write("\n---\n")
-            

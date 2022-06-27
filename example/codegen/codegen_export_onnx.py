@@ -16,7 +16,6 @@ from jaxformer.hf.sample import (
     set_seed,
 )
 
-# sys.path.append(os.path.join(os.path.dirname(os.path.dirname(file_dir)), "fastgpt"))
 from fastgpt import (
     generate_onnx_representation,
     quantize,
@@ -24,35 +23,43 @@ from fastgpt import (
     test_torch_inference,
 )
 
-ckpt = "checkpoints/codegen-350M-mono"
-device = "cpu"
-pad = 50256
-model = create_model(ckpt=ckpt, fp16=False)
-model.eval()
-tokenizer = create_custom_gpt2_tokenizer()
-tokenizer.padding_side = "left"
-tokenizer.pad_token = pad
-# @markdown # Try out the model
-rng_seed = 42  # @param {type:"integer"}
-rng_deterministic = True  # @param {type:"boolean"}
-p = 0.95  # @param {type:"number"}
-t = 0.2  # @param {type:"number"}
-max_length = 128  # @param {type:"integer"}
-batch_size = 1  # @param {type:"integer"}
-context = "def hello_world():"  # @param {type:"string"}
 
-set_seed(rng_seed, deterministic=rng_deterministic)
+def export(ckpt="checkpoints/codegen-350M-mono"):
+    device = "cpu"
+    pad = 50256
+    model = create_model(ckpt=ckpt, fp16=False)
+    model.eval()
+    tokenizer = create_custom_gpt2_tokenizer()
+    tokenizer.padding_side = "left"
+    tokenizer.pad_token = pad
+    # @markdown # Try out the model
+    rng_seed = 42  # @param {type:"integer"}
+    rng_deterministic = True  # @param {type:"boolean"}
+    p = 0.95  # @param {type:"number"}
+    t = 0.2  # @param {type:"number"}
+    max_length = 128  # @param {type:"integer"}
+    batch_size = 1  # @param {type:"integer"}
+    context = "def hello_world():"  # @param {type:"string"}
+    set_seed(rng_seed, deterministic=rng_deterministic)
+
+    # 测试torch输出
+    test_torch_inference(model)
+
+    # 转换onnx
+    onnx_path = generate_onnx_representation(model)
+    model_path = ckpt
+    onnx_path = os.path.join(model_path, "onnx/model.onnx")
+    test_onnx_inference(onnx_path, model.config)
+
+    # 量化onnx
+    quantized_onnx_path = quantize(onnx_path)
+    test_onnx_inference(quantized_onnx_path, model.config)
 
 
-# 测试torch输出
-test_torch_inference(model)
+if __name__ == "__main__":
+    import argparse
 
-# 转换onnx
-onnx_path = generate_onnx_representation(model)
-model_path = ckpt
-onnx_path = os.path.join(model_path, "onnx/model.onnx")
-test_onnx_inference(onnx_path, model.config)
-
-# 量化onnx
-quantized_onnx_path = quantize(onnx_path)
-test_onnx_inference(quantized_onnx_path, model.config)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--model_path", type=str, help="model_path")
+    args = parser.parse_args()
+    export(args.model_path)

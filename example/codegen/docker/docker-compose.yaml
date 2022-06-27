@@ -1,0 +1,14 @@
+version: "2.3"
+services:
+  fastgpt-codegen:
+    container_name: fastgpt-codegen
+    image: lowinli98/fastgpt-codegen:v0.0.3
+    expose:
+      - 7104
+    ports:
+      - "7104:7104"
+    environment:
+      - PORT=7104
+      - GUNICORN_WORKER=1
+      - GUNICORN_THREADS=1
+    restart: always

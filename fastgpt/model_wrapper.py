@@ -11,6 +11,7 @@ class ModelWrapper(torch.nn.Module):
     r"""
     这是一个onnx格式的装饰类，用于定义确定格式的矩阵输入和矩阵输出，从而做onnx格式转换
     """
+
     def __init__(self, model):
         super(ModelWrapper, self).__init__()
         self.model = model
