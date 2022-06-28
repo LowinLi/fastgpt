@@ -2,7 +2,7 @@ version: "2.3"
 services:
   fastgpt-codegen:
     container_name: fastgpt-codegen
-    image: lowinli98/fastgpt-codegen:v0.0.3
+    image: lowinli98/fastgpt-codegen:v0.0.6
     expose:
       - 7104
     ports:
