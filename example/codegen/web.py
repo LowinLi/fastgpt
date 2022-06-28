@@ -10,6 +10,7 @@ multi_model, tokenizer = get_codegen_model_tokenizer("codegen-350M-multi")
 default_parameters = {
     "temp": 0.2,
     "top_p": 0.95,
+    "top_k": 5,
     "max_length_sample": 128,
     "max_length": 2048,
 }
@@ -39,7 +40,9 @@ def generate_mono():
         temperature=parameters["temp"],
         max_length=input_ids.shape[1] + parameters["max_length_sample"],
         top_p=parameters["top_p"],
+        top_k=parameters["top_k"],
         use_cache=True,
+        early_stopping=True
     )
     gen_text = tokenizer.decode(tokens[0][input_ids.shape[1]:], skip_special_tokens=True) # 只要新生成的
     logger.info(f"###\ninput:{inputs}\noutput:{gen_text}")
