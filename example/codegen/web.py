@@ -8,11 +8,19 @@ mono_model, tokenizer = get_codegen_model_tokenizer("codegen-350M-mono")
 multi_model, tokenizer = get_codegen_model_tokenizer("codegen-350M-multi")
 
 default_parameters = {
-    "temp": 0.2,
+    "temperature": 0.9,
     "top_p": 0.95,
     "top_k": 5,
-    "max_length_sample": 128,
-    "max_length": 2048,
+    "output_max_length": 16,
+    "input_max_length": 2048,
+    "early_stopping":True,
+    "use_cache":True,
+    "do_sample":False,
+    "num_return_sequences":1,
+    "length_penalty":2.0,
+    "repetition_penalty":1.0,
+    "pad_token_id": tokenizer.pad_token_id,
+    "eos_token_id": tokenizer.eos_token_id
 }
 
 app = Flask(__name__)
@@ -20,7 +28,6 @@ app = Flask(__name__)
 
 @app.route("/generate_mono", methods=["POST"])
 def generate_mono():
-
     body = request.json
     inputs = body.get("inputs", "")
     parameters = copy.deepcopy(default_parameters)
@@ -30,19 +37,13 @@ def generate_mono():
         inputs,
         truncation=True,
         padding=True,
-        max_length=parameters["max_length"],
+        max_length=parameters["input_max_length"],
         return_tensors="pt",
     ).input_ids
     tokens = mono_model.generate(
         input_ids,
-        do_sample=False,
-        num_return_sequences=1,
-        temperature=parameters["temp"],
-        max_length=input_ids.shape[1] + parameters["max_length_sample"],
-        top_p=parameters["top_p"],
-        top_k=parameters["top_k"],
-        use_cache=True,
-        early_stopping=True
+        max_length=input_ids.shape[1] + parameters["output_max_length"],
+        **parameters
     )
     gen_text = tokenizer.decode(tokens[0][input_ids.shape[1]:], skip_special_tokens=True) # 只要新生成的
     logger.info(f"###\ninput:{inputs}\noutput:{gen_text}")
@@ -54,7 +55,6 @@ def generate_mono():
 
 @app.route("/generate_multi", methods=["POST"])
 def generate_multi():
-
     body = request.json
     inputs = body.get("inputs", "")
     parameters = copy.deepcopy(default_parameters)
@@ -64,17 +64,13 @@ def generate_multi():
         inputs,
         truncation=True,
         padding=True,
-        max_length=parameters["max_length"],
+        max_length=parameters["input_max_length"],
         return_tensors="pt",
     ).input_ids
     tokens = multi_model.generate(
         input_ids,
-        do_sample=False,
-        num_return_sequences=1,
-        temperature=parameters["temp"],
-        max_length=input_ids.shape[1] + parameters["max_length_sample"],
-        top_p=parameters["top_p"],
-        use_cache=True,
+        max_length=input_ids.shape[1] + parameters["output_max_length"],
+        **parameters
     )
     gen_text = tokenizer.decode(tokens[0], skip_special_tokens=True)
     logger.info(f"###\ninput:{inputs}\noutput:{gen_text}")

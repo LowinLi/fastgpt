@@ -11,3 +11,4 @@ dist
 fastgpt.egg-info
 .coverage
 *.md
+*.log
