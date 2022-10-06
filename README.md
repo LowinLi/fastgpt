@@ -2,10 +2,10 @@
 
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/fastgpt.svg)](https://pypi.org/project/fastgpt/)
 [![PyPI](https://img.shields.io/pypi/v/fastgpt.svg)](https://pypi.org/project/fastgpt/)
-[![PyPI](https://img.shields.io/pypi/dw/fastgpt)](https://pypi.org/project/fastgpt/#description)
 [![GitHub license badge](https://img.shields.io/github/license/LowinLi/fastgpt)](https://github.com/LowinLi/fastgpt/blob/main/LICENSE)
 [![Blog](https://img.shields.io/badge/blog-LowinLi-important)](https://lowin.li)
 ![Codecov](https://img.shields.io/codecov/c/github/LowinLi/fastgpt)
+[![Downloads](https://pepy.tech/badge/fastgpt)](https://pepy.tech/project/fastgpt)
 
 ## fastgpt 是什么
 
