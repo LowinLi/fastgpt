@@ -3,17 +3,12 @@ from os import path
 import subprocess
 
 here = path.abspath(path.dirname(__file__))
-version = (
-    subprocess.check_output(["git", "describe", "--abbrev=0", "--tags"])
-    .decode("utf-8")
-    .strip()
-)
 with open(path.join(here, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 
 setuptools.setup(
     name="fastgpt",
-    version=version,
+    version="0.0.8",
     license="MIT License",
     author="LowinLi",
     author_email="lowinli@outlook.com",
